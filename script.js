@@ -8,7 +8,6 @@ let score = 0;
 
 const brickRowCount = 9;
 const brickColumnCount = 5;
-const delay = 500; //delay to reset the game
 
 // Create ball props
 const ball = {
@@ -17,8 +16,7 @@ const ball = {
   size: 10,
   speed: 4,
   dx: 4,
-  dy: -4,
-  visible: true
+  dy: -4
 };
 
 // Create paddle props
@@ -28,8 +26,7 @@ const paddle = {
   w: 80,
   h: 10,
   speed: 8,
-  dx: 0,
-  visible: true
+  dx: 0
 };
 
 // Create brick props
@@ -49,11 +46,7 @@ for (let i = 0; i < brickRowCount; i++) {
   for (let j = 0; j < brickColumnCount; j++) {
     const x = i * (brickInfo.w + brickInfo.padding) + brickInfo.offsetX;
     const y = j * (brickInfo.h + brickInfo.padding) + brickInfo.offsetY;
-    bricks[i][j] = {
-      x,
-      y,
-      ...brickInfo
-    };
+    bricks[i][j] = { x, y, ...brickInfo };
   }
 }
 
@@ -61,7 +54,7 @@ for (let i = 0; i < brickRowCount; i++) {
 function drawBall() {
   ctx.beginPath();
   ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
-  ctx.fillStyle = ball.visible ? '#0095dd': 'transparent';
+  ctx.fillStyle = '#0095dd';
   ctx.fill();
   ctx.closePath();
 }
@@ -70,12 +63,12 @@ function drawBall() {
 function drawPaddle() {
   ctx.beginPath();
   ctx.rect(paddle.x, paddle.y, paddle.w, paddle.h);
-  ctx.fillStyle = paddle.visible ? '#0095dd': 'transparent';
+  ctx.fillStyle = '#0095dd';
   ctx.fill();
   ctx.closePath();
 }
 
-// Draw score on canvas
+// Draw score oon canvas
 function drawScore() {
   ctx.font = '20px Arial';
   ctx.fillText(`Score: ${score}`, canvas.width - 100, 30);
@@ -87,7 +80,7 @@ function drawBricks() {
     column.forEach(brick => {
       ctx.beginPath();
       ctx.rect(brick.x, brick.y, brick.w, brick.h);
-      ctx.fillStyle = brick.visible ? '#0095dd': 'transparent';
+      ctx.fillStyle = brick.visible ? '#0095dd' : 'transparent';
       ctx.fill();
       ctx.closePath();
     });
@@ -164,22 +157,8 @@ function moveBall() {
 function increaseScore() {
   score++;
 
-  if (score % (brickRowCount * brickColumnCount) === 0) {
-
-    ball.visible = false;
-    paddle.visible = false;
-
-    //After 0.5 sec restart the game
-    setTimeout(function () {
-      showAllBricks();
-      score = 0;
-      paddle.x = canvas.width / 2 - 40;
-      paddle.y = canvas.height - 20;
-      ball.x = canvas.width / 2;
-      ball.y = canvas.height / 2;
-      ball.visible = true;
-      paddle.visible = true;
-    }, delay)
+  if (score % (brickRowCount * brickRowCount) === 0) {
+    showAllBricks();
   }
 }
 
